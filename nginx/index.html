@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Web Security</h1>
+
+    <div id="form">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" />
+      <label for="passwort">Passwort</label>
+      <input type="text" id="passwort" name="passwort" />
+    </div>
+
+    <div id="buttons">
+      <button onclick="register()">Register</button>
+      <button onclick="login()">Login</button>
+      <button onclick="getprotected()">Versteckte Daten!</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </body>
+</html>
+
+<script>
+  const register = () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("passwort").value;
+
+    user = {
+      email: email,
+      password: password,
+    };
+
+    fetch("http://localhost/api/register", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+
+  const login = () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("passwort").value;
+
+    payload = {
+      email: email,
+      password: password,
+    };
+
+    fetch("http://localhost/api/login", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+
+  const getprotected = () => {
+    fetch("http://localhost/api/protected")
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+
+  const logout = () => {
+    fetch("http://localhost/api/logout", {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+</script>
+
+<style>
+  button {
+    font-size: 24px;
+    margin: 5px;
+  }
+
+  #form,
+  #buttons {
+    padding: 20px 10px;
+  }
+</style>

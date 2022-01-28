@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  fastapi:
+    build: ./fastapi
+    container_name: fastapi
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+
+  db:
+    image: mysql:8.0.28
+    restart: always
+    environment:
+      MYSQL_DATABASE: "db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+      - "3306:3306"
+    volumes:
+      - /opt/mysql_data:/var/lib/mysql
