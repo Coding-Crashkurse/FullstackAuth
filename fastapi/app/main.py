@@ -70,9 +70,9 @@ def create_user(user: schemas.User, db: Session = Depends(get_db)):
 def login(user: schemas.User, Authorize: AuthJWT = Depends(), db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=401,detail="Bad username or password")
 
-    if db_user.email != user.email or pwd_context.verify(db_user.hashed_password, user.password) == False:
+    if db_user.email != user.email or pwd_context.verify(user.password, db_user.hashed_password) == False:
         raise HTTPException(status_code=401,detail="Bad username or password")
 
     # Create the tokens and passing to set_access_cookies or set_refresh_cookies
@@ -92,7 +92,7 @@ def refresh(Authorize: AuthJWT = Depends()):
     new_access_token = Authorize.create_access_token(subject=current_user)
     # Set the JWT cookies in the response
     Authorize.set_access_cookies(new_access_token)
-    return {"msg":"The token has been refresh"}
+    return {"msg":"The token has been refreshed"}
 
 @app.delete('/api/logout')
 def logout(Authorize: AuthJWT = Depends()):
@@ -116,4 +116,4 @@ def protected(Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
 
     current_user = Authorize.get_jwt_subject()
-    return {"user": current_user}
+    return {"user": current_user, "secret data": "Very secret string"}

@@ -19,6 +19,7 @@
     <div id="buttons">
       <button onclick="register()">Register</button>
       <button onclick="login()">Login</button>
+      <button onclick="refreshToken()">Refresh Token</button>
       <button onclick="getprotected()">Versteckte Daten!</button>
       <button onclick="logout()">Logout</button>
     </div>
@@ -68,6 +69,18 @@
       .then((data) => console.log(data));
   };
 
+  const refreshToken = () => {
+    fetch("http://localhost/api/refresh", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+
   const getprotected = () => {
     fetch("http://localhost/api/protected")
       .then((response) => response.json())
@@ -88,7 +101,8 @@
 </script>
 
 <style>
-  button {
+  button,
+  #form {
     font-size: 24px;
     margin: 5px;
   }

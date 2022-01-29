@@ -28,4 +28,4 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /opt/mysql_data:/var/lib/mysql
+      - ./mydb:/var/lib/mysql
